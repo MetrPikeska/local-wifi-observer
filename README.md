@@ -113,28 +113,188 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Single Scan and Analysis
+### Quick Start Commands
+
+```powershell
+# 1. Single scan - basic environmental snapshot
+python main.py scan
+
+# 2. View current system status
+python main.py status
+
+# 3. Generate detailed text report
+python main.py report
+
+# 4. Generate JSON report for machine processing
+python main.py report --format json
+
+# 5. View current baseline statistics
+python main.py baseline --show
+
+# 6. Continuous monitoring (60 second intervals)
+python main.py monitor --interval 60
+
+# 7. Continuous monitoring (5 minute intervals)
+python main.py monitor --interval 300
+```
+
+### Command Reference
+
+#### `scan` - Single Environmental Scan
+Performs one complete data collection cycle including:
+- Wi-Fi interface status
+- Available networks (BSSIDs, SSIDs, channels, RSSI)
+- Network configuration (IP, gateways)
+- ARP table snapshot
+- Statistical analysis
+- Anomaly detection
+- Fingerprint generation
+
 ```powershell
 python main.py scan
 ```
 
-### Continuous Monitoring
+**Output:**
+- Raw data saved to `data/raw/`
+- Normalized data saved to `data/normalized/`
+- Text report saved to `data/reports/`
+- JSON report saved to `data/reports/`
+- Console summary displayed
+
+---
+
+#### `monitor` - Continuous Monitoring
+Runs repeated scans at specified intervals, ideal for:
+- Long-term pattern observation
+- Baseline building
+- Change detection over time
+
 ```powershell
+# Monitor every 60 seconds
 python main.py monitor --interval 60
+
+# Monitor every 5 minutes (300 seconds)
+python main.py monitor --interval 300
+
+# Monitor every hour (3600 seconds)
+python main.py monitor --interval 3600
 ```
 
-### View Current Status
+**Options:**
+- `--interval`: Seconds between scans (default: 60)
+
+**Press Ctrl+C to stop monitoring**
+
+---
+
+#### `status` - System Status Check
+Quick health check showing:
+- Total observations collected
+- Date range of data
+- Baseline status
+- Recent activity summary
+
 ```powershell
 python main.py status
 ```
 
-### Generate Report
+**Use this to:**
+- Verify system is working
+- Check data collection progress
+- See baseline readiness
+
+---
+
+#### `report` - Generate Analysis Report
+Creates comprehensive report from latest observation:
+- Environmental metrics
+- Baseline comparison
+- Temporal trends
+- Anomalies detected
+- Distance estimation (if enabled)
+- Fingerprint analysis
+
 ```powershell
+# Human-readable text report
+python main.py report
+
+# Machine-readable JSON report
+python main.py report --format json
+
+# Both formats
+python main.py report --format text
 python main.py report --format json
 ```
 
-### View Baseline
+**Output locations:**
+- Text: `data/reports/report_YYYYMMDD_HHMMSS.txt`
+- JSON: `data/reports/report_YYYYMMDD_HHMMSS.json`
+
+---
+
+#### `baseline` - Baseline Management
+View or rebuild baseline statistical model:
+
 ```powershell
+# Show current baseline statistics
+python main.py baseline --show
+
+# Rebuild baseline from collected data
+python main.py baseline --rebuild
+```
+
+**Baseline includes:**
+- BSSID count (mean, std, confidence intervals)
+- RSSI distribution (mean, std, percentiles)
+- Channel usage patterns
+- Temporal patterns (hour-of-day, day-of-week)
+
+---
+
+### Typical Workflows
+
+#### First Time Setup
+```powershell
+# 1. Run initial scan
+python main.py scan
+
+# 2. Check status
+python main.py status
+
+# 3. View report
+python main.py report
+```
+
+#### Building Baseline (Recommended)
+```powershell
+# Run monitoring for 24-48 hours to learn environment
+python main.py monitor --interval 300
+
+# After sufficient data, view baseline
+python main.py baseline --show
+```
+
+#### Daily Analysis
+```powershell
+# Morning scan
+python main.py scan
+
+# Check for anomalies
+python main.py report
+
+# Compare to baseline
+python main.py baseline --show
+```
+
+#### Investigating Changes
+```powershell
+# Take current snapshot
+python main.py scan
+
+# Compare to historical data
+python main.py report --format json
+
+# Look for patterns
 python main.py baseline --show
 ```
 
