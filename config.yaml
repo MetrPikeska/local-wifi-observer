@@ -1,0 +1,159 @@
+# ambient-wifi-monitor Configuration
+# Environment-specific settings for Wi-Fi environmental analysis
+
+# Data collection settings
+collection:
+  # Interval between scans (seconds)
+  scan_interval: 60
+  
+  # Maximum scan failures before alerting
+  max_failures: 3
+  
+  # Timeout for individual commands (seconds)
+  command_timeout: 30
+
+# Storage settings
+storage:
+  # Base directory for all data (relative to project root)
+  data_dir: "data"
+  
+  # Subdirectories
+  raw_dir: "raw"
+  normalized_dir: "normalized"
+  baselines_dir: "baselines"
+  reports_dir: "reports"
+  
+  # Data retention (days, 0 = unlimited)
+  retention_days: 90
+
+# Baseline modeling settings
+baseline:
+  # Minimum observations required to establish baseline
+  min_observations: 100
+  
+  # Window size for rolling statistics (observations)
+  rolling_window: 50
+  
+  # Confidence threshold for baseline stability (0.0-1.0)
+  stability_threshold: 0.85
+  
+  # Update frequency (observations between recalculation)
+  update_interval: 10
+
+# Temporal analysis settings
+temporal:
+  # Comparison windows (in observations)
+  short_term_window: 10
+  medium_term_window: 50
+  long_term_window: 200
+  
+  # Smoothing factor for trend detection (0.0-1.0)
+  smoothing_factor: 0.3
+  
+  # Minimum change threshold to report (percentage)
+  min_change_threshold: 15.0
+
+# Anomaly detection settings
+anomaly:
+  # Statistical method: zscore, iqr, isolation_forest
+  method: "zscore"
+  
+  # Z-score threshold for anomaly detection
+  zscore_threshold: 3.0
+  
+  # IQR multiplier for outlier detection
+  iqr_multiplier: 1.5
+  
+  # Confidence levels for reporting
+  confidence_high: 0.90
+  confidence_medium: 0.70
+  confidence_low: 0.50
+
+# Environmental fingerprinting settings
+fingerprint:
+  # Features to include in fingerprint
+  features:
+    - "bssid_count"
+    - "ssid_count"
+    - "rssi_mean"
+    - "rssi_std"
+    - "channel_diversity"
+    - "signal_stability"
+  
+  # Similarity threshold for matching (0.0-1.0)
+  similarity_threshold: 0.85
+  
+  # Fingerprint update interval (observations)
+  update_interval: 25
+
+# Reporting settings
+reporting:
+  # Verbosity level: minimal, standard, detailed
+  verbosity: "standard"
+  
+  # Include raw data in reports
+  include_raw: false
+  
+  # Output formats: text, json, csv
+  formats:
+    - "text"
+    - "json"
+  
+  # Timestamp format
+  timestamp_format: "%Y-%m-%d %H:%M:%S"
+
+# Logging settings
+logging:
+  # Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  level: "INFO"
+  
+  # Log file location
+  log_file: "logs/ambient-wifi-monitor.log"
+  
+  # Console logging enabled
+  console_enabled: true
+  
+  # File logging enabled
+  file_enabled: true
+  
+  # Log rotation size (MB)
+  max_size_mb: 10
+  
+  # Number of backup files
+  backup_count: 5
+
+# Ethics and compliance
+compliance:
+  # Explicitly disable all prohibited operations
+  packet_sniffing_disabled: true
+  monitor_mode_disabled: true
+  tracking_disabled: true
+  
+  # Data handling restrictions
+  mac_tracking_disabled: true
+  person_identification_disabled: true
+  location_computation_disabled: false  # ENABLED: Distance estimation for environmental analysis
+
+# Distance estimation settings
+distance_estimation:
+  # Enable distance computation from RSSI
+  enabled: true
+  
+  # Reference transmit power (dBm) - typical for Wi-Fi AP
+  reference_tx_power: 20
+  
+  # Path loss exponent (environment dependent)
+  # 2.0 = free space, 2.5-3.0 = office, 3.5-4.0 = dense indoor
+  path_loss_exponent: 3.0
+  
+  # Environmental constant (dBm)
+  environmental_constant: 0
+  
+  # Show exact distances in reports
+  show_exact_distances: false
+  
+  # Show distance zones instead
+  show_distance_zones: true
+  
+  # Uncertainty margin (meters) - always displayed
+  uncertainty_margin: 10
